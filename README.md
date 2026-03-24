@@ -1,2 +1,2 @@
 # pway
-LIbary for create wayland's window
+Library for create wayland's window
