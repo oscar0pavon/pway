@@ -24,6 +24,7 @@ clean:
 
 install: all
 	cp -f libpway.a /usr/local/lib
+	cp -f pway.h /usr/local/include/
 
 
 .PHONY: all clean install

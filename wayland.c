@@ -200,7 +200,6 @@ bool init_wayland() {
   
   xdg_toplevel_add_listener(wayland_terminal.window, &window_listener, &wayland_terminal);
 
-  xdg_toplevel_set_title(wayland_terminal.window, "pterminal");
 
   //wl_display_roundtrip(wayland_terminal.display);
   wl_surface_commit(wayland_terminal.wayland_surface);//TODO
