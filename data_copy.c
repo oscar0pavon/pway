@@ -65,7 +65,7 @@ static const struct wl_data_source_listener data_source_listener = {
 void perform_copy_primary(){
   struct zwp_primary_selection_source_v1 *source = 
         zwp_primary_selection_device_manager_v1_create_source(
-            wayland_terminal.primary_selection_manager);
+            primary_selection.primary_selection_manager);
 
   zwp_primary_selection_source_v1_add_listener(source, 
                                               &primary_source_listener, 

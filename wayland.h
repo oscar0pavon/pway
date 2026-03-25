@@ -6,7 +6,6 @@
 #include <stdbool.h>
 #include <sys/poll.h>
 #include <wayland-client-protocol.h>
-#include "primary_selection.h"
 
 typedef struct wl_buffer_listener BufferListener;
 typedef struct xdg_surface_listener SurfaceListener;
@@ -16,7 +15,7 @@ typedef struct xdg_surface DesktopSurface;
 typedef struct wl_registry Registry;
 typedef struct wl_buffer Buffer;
 
-typedef struct WaylandTerminal{
+typedef struct PWayland{
     struct wl_display *display;
     Registry *registry;
     struct wl_compositor *compositor;
@@ -30,10 +29,10 @@ typedef struct WaylandTerminal{
     struct wl_data_device_manager *data_device_manager;
     struct wl_data_device *data_device;
     struct wl_data_offer *active_data_offer;
-    struct zwp_primary_selection_device_manager_v1 *primary_selection_manager;
-}WaylandTerminal;
+}PWayland;
 
-extern WaylandTerminal wayland_terminal;
+
+extern PWayland wayland_terminal;
 
 extern int wayland_fd;
 extern struct pollfd *events_fds;

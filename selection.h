@@ -3,9 +3,11 @@
 
 #include "primary_selection.h"
 
+
 typedef struct PrimarySelection{
   struct zwp_primary_selection_device_v1 *device;
   struct zwp_primary_selection_offer_v1 *offer;
+  struct zwp_primary_selection_device_manager_v1 *primary_selection_manager;
 }PrimarySelection;
 
 extern PrimarySelection primary_selection;

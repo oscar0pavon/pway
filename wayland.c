@@ -19,7 +19,7 @@
 
 struct pollfd *events_fds = NULL;
 
-WaylandTerminal wayland_terminal = {};
+PWayland wayland_terminal = {};
 
 int wayland_fd;
 
@@ -44,7 +44,7 @@ bool handle_wayland_initialization(){
 }
 void configure_surface(void* data, DesktopSurface *surface, uint32_t serial){
 
-  WaylandTerminal* terminal = (WaylandTerminal*)data;
+  PWayland* terminal = (PWayland*)data;
 
   xdg_surface_ack_configure(surface, serial);
 
@@ -53,7 +53,7 @@ void configure_surface(void* data, DesktopSurface *surface, uint32_t serial){
 void configure_window(void* data, struct xdg_toplevel* window, int width, 
     int height, struct wl_array *state){
 
-  WaylandTerminal* terminal = data;
+  PWayland* terminal = data;
 
   //printf("Compositor suggested size %i %i\n",width, height); 
 
@@ -86,7 +86,7 @@ WindowListener window_listener = {
 void register_global(void *data, Registry *registry, uint32_t name_id,
     const char *interface_name, uint32_t version) {
 
-  WaylandTerminal *terminal = (WaylandTerminal*)data;
+  PWayland *terminal = (PWayland*)data;
 
   if (strcmp(interface_name, wl_compositor_interface.name) == 0) {
 
@@ -121,7 +121,7 @@ void register_global(void *data, Registry *registry, uint32_t name_id,
         );
   } else if (strcmp(interface_name, "zwp_primary_selection_device_manager_v1") == 0) {
 
-    terminal->primary_selection_manager = 
+    primary_selection.primary_selection_manager = 
       wl_registry_bind(registry, name_id,
           &zwp_primary_selection_device_manager_v1_interface, 1);
 

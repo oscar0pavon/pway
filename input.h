@@ -3,7 +3,7 @@
 
 #include "wayland.h"
 
-void configure_input(WaylandTerminal* wayland);
+void configure_input(PWayland* wayland);
 
 
 #endif

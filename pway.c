@@ -13,3 +13,8 @@ bool pway_create_window(const char* name){
   return status;
 }
 
+void pway_finish(void){
+
+  wl_display_disconnect(wayland_terminal.display);
+}
+

@@ -39,7 +39,7 @@ static const struct zwp_primary_selection_device_v1_listener primary_device_list
 void configure_selection(void){
  primary_selection.device =
    zwp_primary_selection_device_manager_v1_get_device(
-       wayland_terminal.primary_selection_manager, 
+       primary_selection.primary_selection_manager, 
        wayland_terminal.seat);
 
  zwp_primary_selection_device_v1_add_listener(primary_selection.device, 

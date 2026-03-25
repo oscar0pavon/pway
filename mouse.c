@@ -15,7 +15,7 @@ PMouse main_mouse = {0};
 static void pointer_handle_enter(void *data, struct wl_pointer *pointer,
                                  uint32_t serial, struct wl_surface *surface,
                                  wl_fixed_t sx, wl_fixed_t sy) {
-    WaylandTerminal *term = data;
+    PWayland* term = data;
     //TODO show the updated cursor
     // Set the cursor image every time we enter the surface
     // wl_pointer_set_cursor(pointer, serial, term->cursor_surface, 
@@ -25,7 +25,7 @@ static void pointer_handle_enter(void *data, struct wl_pointer *pointer,
 
 static void pointer_handle_motion(void *data, struct wl_pointer *pointer,
                                   uint32_t time, wl_fixed_t sx, wl_fixed_t sy) {
-  WaylandTerminal *term = data;
+  PWayland *term = data;
  
   //TODO handle program mouse report
   //main_mouse.x = wl_fixed_to_double(sx);

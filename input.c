@@ -6,7 +6,7 @@
 
 static void seat_handle_capabilities(void *data, struct wl_seat *seat,
                                      uint32_t capabilities) {
-  WaylandTerminal *app = data;
+  PWayland *app = data;
 
   if ((capabilities & WL_SEAT_CAPABILITY_POINTER) && !app->pointer) {
 
@@ -43,7 +43,7 @@ static const struct wl_seat_listener seat_listener = {
     .name = seat_handle_name,
 };
 
-void configure_input(WaylandTerminal* wayland){
+void configure_input(PWayland* wayland){
 
   wl_seat_add_listener(wayland->seat, &seat_listener, wayland);
 
