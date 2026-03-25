@@ -1,9 +1,9 @@
 #!/bin/sh
 
 wayland-scanner client-header \
-  /usr/share/wayland-protocols/stable/xdg-shell/xdg-shell.xml protocol.h
+  /usr/share/wayland-protocols/stable/xdg-shell/xdg-shell.xml xdg_protocol.h
 wayland-scanner private-code \
-  /usr/share/wayland-protocols/stable/xdg-shell/xdg-shell.xml protocol.c
+  /usr/share/wayland-protocols/stable/xdg-shell/xdg-shell.xml xdg_protocol.c
 
 
 wayland-scanner client-header \

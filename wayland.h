@@ -1,7 +1,7 @@
 #ifndef WAYLAND_H
 #define WAYLAND_H
 
-#include "protocol.h"
+#include "xdg_protocol.h"
 
 #include <stdbool.h>
 #include <sys/poll.h>

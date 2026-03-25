@@ -1,7 +1,6 @@
 #include "wayland.h"
 #include "keyboard.h"
 #include "primary_selection.h"
-#include "protocol.h"
 #include <complex.h>
 #include <stdbool.h>
 #include <stdint.h>
