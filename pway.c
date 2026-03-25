@@ -10,6 +10,8 @@ bool pway_create_window(const char* name){
   if(status == true)
     xdg_toplevel_set_title(wayland_terminal.window, name);
 
+  pway_display = wayland_terminal.display;
+
   return status;
 }
 
