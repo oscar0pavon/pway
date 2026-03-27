@@ -16,11 +16,7 @@
 #include "pway.h"
 #include "selection.h"
 
-
-struct pollfd *events_fds = NULL;
-
 PWayland wayland_terminal = {};
-
 
 typedef struct WaylandInitialization{
   bool compositor;
@@ -155,7 +151,7 @@ void* run_wayland_loop(void*none){
 
 void pway_handle_events(){
 
-  if(events_fds[1].revents & POLLIN){
+  if(pway->events_fds[1].revents & POLLIN){
     wl_display_read_events(wayland_terminal.display);
   }else{
     wl_display_cancel_read(wayland_terminal.display);

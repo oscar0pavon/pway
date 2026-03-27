@@ -10,6 +10,7 @@ typedef struct PWay{
   PMouse mouse;
   int fd;
   int keys_timer_fd;
+  struct pollfd *events_fds;
 }PWay;
 
 PWay* pway_init();

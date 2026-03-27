@@ -143,7 +143,7 @@ void init_keyboard_reapeat_handler(){
 
 void handle_repeat_keys(){
 
-  if( events_fds[2].revents & POLLIN ){
+  if( pway->events_fds[2].revents & POLLIN ){
     uint64_t expirations;
     
     if(read(main_keyboard.timer_fd, &expirations, sizeof(expirations) > 0)) {

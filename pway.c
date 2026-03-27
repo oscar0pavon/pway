@@ -10,18 +10,21 @@ struct wl_surface *pway_surface;
 
 PWay* pway_init(){
 
+  pway = malloc(sizeof(PWay));
+
   bool status = init_wayland();
   
   pway_display = wayland_terminal.display;
   pway_surface = wayland_terminal.wayland_surface;
 
-  pway = malloc(sizeof(PWay));
   return pway;  
 }
 
 bool pway_create_window(const char* name){
 
   xdg_toplevel_set_title(wayland_terminal.window, name);
+
+  return true;
 
 }
 
