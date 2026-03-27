@@ -149,7 +149,13 @@ void* run_wayland_loop(void*none){
 
 void pway_handle_events(){
 
-  if(pway->events_fds[1].revents & POLLIN){
+  pway_prepare_to_read_events();
+
+  if (poll(pway->fds, 3, -1) == -1) {
+    perror("Poll in fds, APP or Wayland, Keyboard timer");
+  }
+
+  if(pway->fds[0].revents & POLLIN){
     wl_display_read_events(wayland_terminal.display);
     printf("wayland poll\n");
   }else{

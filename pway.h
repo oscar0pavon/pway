@@ -5,12 +5,15 @@
 
 #include <wayland-client-protocol.h>
 #include "mouse.h"
+#include <poll.h>
 
 typedef struct PWay{
   PMouse mouse;
   int fd;
   int keys_timer_fd;
+  struct pollfd fds[3];
   struct pollfd *events_fds;
+  struct pollfd *app_fd;
   void (*resize)(int x,int y);
   void (*exit)(void);
   void (*focus)(bool is_focuses);
@@ -18,6 +21,10 @@ typedef struct PWay{
 }PWay;
 
 PWay* pway_init();
+
+void pway_set_app_fd(int fd);
+
+bool pway_app_has_event();
 
 bool pway_create_window(const char* name);
 
