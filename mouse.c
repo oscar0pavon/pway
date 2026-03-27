@@ -7,9 +7,8 @@
 //#include "../mouse.h"
 #include "copy_paste.h"
 //#include "../terminal.h"
+#include "pway.h"
 #include "wayland.h"
-
-PMouse main_mouse = {0};
 
 
 static void pointer_handle_enter(void *data, struct wl_pointer *pointer,
@@ -39,10 +38,10 @@ static void pointer_handle_motion(void *data, struct wl_pointer *pointer,
 
 void press_button(){
 
-  if(main_mouse.current_button){
+  if(pway->mouse.current_button){
 
-    main_mouse.current_button->pressed = true;
-    main_mouse.current_button->released = false;
+    pway->mouse.current_button->pressed = true;
+    pway->mouse.current_button->released = false;
 
   }
   //mouse_click(); //TODO handle program click
@@ -50,20 +49,20 @@ void press_button(){
 
 void clean_mouse_buttons(){
 
-  if(main_mouse.current_button){
-    if(main_mouse.current_button->released){
-      main_mouse.current_button->released = false;
-      main_mouse.current_button = NULL;
+  if(pway->mouse.current_button){
+    if(pway->mouse.current_button->released){
+      pway->mouse.current_button->released = false;
+      pway->mouse.current_button = NULL;
     }
   }
 }
 
 void release_mouse_button(){
 
-  if(main_mouse.current_button){
+  if(pway->mouse.current_button){
     
-    main_mouse.current_button->pressed = false;
-    main_mouse.current_button->released = true;
+    pway->mouse.current_button->pressed = false;
+    pway->mouse.current_button->released = true;
 
   }
 }
@@ -72,28 +71,28 @@ static void pointer_handle_button(void *data, struct wl_pointer *pointer,
                                   uint32_t serial, uint32_t time, 
                                   uint32_t button, uint32_t state) {
 
-  main_mouse.current_button = NULL;
+  pway->mouse.current_button = NULL;
 
   switch (button) {
       case BTN_LEFT:
-                   main_mouse.current_button = &main_mouse.left_button; 
-                   main_mouse.current_button->id = 0;
+                   pway->mouse.current_button = &pway->mouse.left_button; 
+                   pway->mouse.current_button->id = 0;
                    break;
       case BTN_MIDDLE:  
-                   main_mouse.current_button = &main_mouse.middle_button; 
-                   main_mouse.current_button->id = 1;
+                   pway->mouse.current_button = &pway->mouse.middle_button; 
+                   pway->mouse.current_button->id = 1;
                    break;
       case BTN_RIGHT:
-                   main_mouse.current_button = &main_mouse.right_button; 
-                   main_mouse.current_button->id = 2;
+                   pway->mouse.current_button = &pway->mouse.right_button; 
+                   pway->mouse.current_button->id = 2;
                    break;
       default:
-                   main_mouse.current_button = NULL;
+                   pway->mouse.current_button = NULL;
   }
 
   if (state == WL_POINTER_BUTTON_STATE_PRESSED) {
 
-    main_mouse.last_input_serial = serial;
+    pway->mouse.last_input_serial = serial;
 
 
     //TODO callback
@@ -172,7 +171,7 @@ void configure_mouse(void){
 
   wl_pointer_add_listener(wayland_terminal.pointer, &pointer_listener, &wayland_terminal);
 
-  main_mouse.wheel_up.id = 65;
-  main_mouse.wheel_down.id = 64;
+  pway->mouse.wheel_up.id = 65;
+  pway->mouse.wheel_down.id = 64;
   
 }

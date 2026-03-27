@@ -38,6 +38,4 @@ void release_mouse_button();
 
 void clean_mouse_buttons();
 
-extern PMouse main_mouse;
-
 #endif

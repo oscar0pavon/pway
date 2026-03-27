@@ -9,6 +9,7 @@
 #include "primary_selection.h"
 #include "selection.h"
 #include "mouse.h"
+#include "pway.h"
 
 void copy_data_to_fd(const char* mime_type, int32_t fd){
 
@@ -77,7 +78,7 @@ void perform_copy_primary(){
 
   zwp_primary_selection_device_v1_set_selection(primary_selection.device, 
                                                 source, 
-                                                main_mouse.last_input_serial);
+                                                pway->mouse.last_input_serial);
 
 
   wl_display_flush(wayland_terminal.display);

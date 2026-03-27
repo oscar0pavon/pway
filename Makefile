@@ -1,3 +1,4 @@
+#include "mouse.h"
 # pterminal
 # See LICENSE file for copyright and license details.
 .POSIX:
@@ -24,7 +25,9 @@ clean:
 
 install: all
 	cp -f libpway.a /usr/local/lib
-	cp -f pway.h /usr/local/include/
+	mkdir -p /usr/local/include/pway
+	cp -f pway.h /usr/local/include/pway
+	cp -f mouse.h /usr/local/include/pway
 
 
 .PHONY: all clean install
