@@ -1,5 +1,6 @@
 #include "keyboard.h"
 #include "copy_paste.h"
+#include "pway.h"
 #include "wayland.h"
 #include <bits/time.h>
 #include <bits/types/struct_itimerspec.h>
@@ -136,6 +137,7 @@ void keyboard_update_timer(){
 }
 void init_keyboard_reapeat_handler(){
   main_keyboard.timer_fd = timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
+  pway->keys_timer_fd = main_keyboard.timer_fd;
 }
 
 

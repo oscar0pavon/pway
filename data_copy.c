@@ -63,7 +63,7 @@ static const struct wl_data_source_listener data_source_listener = {
     .cancelled = data_source_handle_cancelled,
 };
 
-void perform_copy_primary(){
+void pway_primary_copy(){
   struct zwp_primary_selection_source_v1 *source = 
         zwp_primary_selection_device_manager_v1_create_source(
             primary_selection.primary_selection_manager);

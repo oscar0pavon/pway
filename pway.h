@@ -9,6 +9,7 @@
 typedef struct PWay{
   PMouse mouse;
   int fd;
+  int keys_timer_fd;
 }PWay;
 
 PWay* pway_init();
@@ -19,6 +20,8 @@ void pway_prepare_to_read_events();
 void pway_handle_events();
 
 void pway_finish(void);
+
+void pway_primary_copy();
 
 extern PWay* pway;
 
