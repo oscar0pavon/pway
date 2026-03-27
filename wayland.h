@@ -34,11 +34,8 @@ typedef struct PWayland{
 
 extern PWayland wayland_terminal;
 
-extern int wayland_fd;
 extern struct pollfd *events_fds;
 
-void prepate_to_read_events();
-void handle_events();
 
 bool init_wayland(void);
 

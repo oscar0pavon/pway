@@ -8,11 +8,15 @@
 
 typedef struct PWay{
   PMouse mouse;
+  int fd;
 }PWay;
 
 PWay* pway_init();
 
 bool pway_create_window(const char* name);
+
+void pway_prepare_to_read_events();
+void pway_handle_events();
 
 void pway_finish(void);
 

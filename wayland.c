@@ -13,6 +13,7 @@
 #include "input.h"
 #include "data.h"
 
+#include "pway.h"
 #include "selection.h"
 
 
@@ -20,7 +21,6 @@ struct pollfd *events_fds = NULL;
 
 PWayland wayland_terminal = {};
 
-int wayland_fd;
 
 typedef struct WaylandInitialization{
   bool compositor;
@@ -137,7 +137,7 @@ RegistryListener registry_listener = {
   .global_remove = remove_global
 };
 
-void prepate_to_read_events(){
+void pway_prepare_to_read_events(){
   while(wl_display_prepare_read(wayland_terminal.display) != 0)
     wl_display_dispatch_pending(wayland_terminal.display);
 
@@ -153,7 +153,7 @@ void* run_wayland_loop(void*none){
   return NULL;
 }
 
-void handle_events(){
+void pway_handle_events(){
 
   if(events_fds[1].revents & POLLIN){
     wl_display_read_events(wayland_terminal.display);
@@ -205,7 +205,7 @@ bool init_wayland() {
   wl_display_flush(wayland_terminal.display);
 
 
-  wayland_fd = wl_display_get_fd(wayland_terminal.display);
+  pway->fd = wl_display_get_fd(wayland_terminal.display);
   init_keyboard_reapeat_handler();
 
   configure_data();
