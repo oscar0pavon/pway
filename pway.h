@@ -25,7 +25,7 @@ void pway_primary_copy();
 
 extern PWay* pway;
 
-struct wl_display *pway_display;
-struct wl_surface *pway_surface;
+extern struct wl_display *pway_display;
+extern struct wl_surface *pway_surface;
 
 #endif

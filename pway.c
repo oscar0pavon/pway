@@ -5,6 +5,9 @@
 
 PWay* pway;
 
+struct wl_display *pway_display;
+struct wl_surface *pway_surface;
+
 PWay* pway_init(){
 
   bool status = init_wayland();
