@@ -11,6 +11,9 @@ typedef struct PWay{
   int fd;
   int keys_timer_fd;
   struct pollfd *events_fds;
+  void (*resize)(int x,int y);
+  void (*exit)(void);
+  void (*focus)(bool is_focuses);
 }PWay;
 
 PWay* pway_init();

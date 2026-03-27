@@ -56,17 +56,14 @@ static void keyboard_handle_keymap(void *data, struct wl_keyboard *keyboard,
 static void keyboard_handle_enter(void *data, struct wl_keyboard *keyboard,
                                   uint32_t serial, struct wl_surface *surface,
                                   struct wl_array *keys) {
-  //TODO callback
-   // focus_window(true);
-
+  pway->focus(true);
 }
 
 static void keyboard_handle_leave(void *data, struct wl_keyboard *keyboard,
                                   uint32_t serial, struct wl_surface *surface) {
-
-  //TODO callcack
-    //focus_window(false);
-    stop_repeat_time();
+    
+  pway->focus(false);
+  stop_repeat_time();
 
 }
 

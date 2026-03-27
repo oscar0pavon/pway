@@ -57,16 +57,14 @@ void configure_window(void* data, struct xdg_toplevel* window, int width,
   }
 
 
-  //TODO callback
-  //resize_pterminal(width, height);
+  pway->resize(width,height);
 
 
 }
 
 void handle_exit(void *data, struct xdg_toplevel* window){
   printf("Request close window\n");
-  //TODO hadle program main loop 
-  //terminal_window.is_running = false;
+  pway->exit();
 }
 
 SurfaceListener surface_listener = {
@@ -153,6 +151,7 @@ void pway_handle_events(){
 
   if(pway->events_fds[1].revents & POLLIN){
     wl_display_read_events(wayland_terminal.display);
+    printf("wayland poll\n");
   }else{
     wl_display_cancel_read(wayland_terminal.display);
   }
