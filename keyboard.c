@@ -108,11 +108,10 @@ void handle_key_sym(xkb_keysym_t sym){
   }
 
   if (len > 0) {
-    //TODO callback
-    // if (!ctrl_pressed)
-    //   write_to_tty(buf, len - 1, 1);
-    // else
-    //   write_to_tty(buf, len, 1);
+    if (!ctrl_pressed)
+      pway->input(buf, len - 1);
+    else
+      pway->input(buf, len);
   }
 
 }

@@ -14,6 +14,7 @@ typedef struct PWay{
   void (*resize)(int x,int y);
   void (*exit)(void);
   void (*focus)(bool is_focuses);
+  void (*input)(const char* text, int len);
 }PWay;
 
 PWay* pway_init();
