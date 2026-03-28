@@ -157,7 +157,7 @@ void pway_handle_events(){
 
   if(pway->fds[0].revents & POLLIN){
     wl_display_read_events(wayland_terminal.display);
-    printf("wayland poll\n");
+    //printf("wayland poll\n");
   }else{
     wl_display_cancel_read(wayland_terminal.display);
   }

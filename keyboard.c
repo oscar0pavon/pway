@@ -141,10 +141,13 @@ void handle_repeat_keys(){
 
   if( pway->fds[1].revents & POLLIN ){
     uint64_t expirations;
-    
-    if(read(main_keyboard.timer_fd, &expirations, sizeof(expirations) > 0)) {
+   
+    uint32_t size = sizeof(expirations);
 
-      handle_key_sym(main_keyboard.last_key_sym);
+    if( read( main_keyboard.timer_fd, &expirations, size ) ) {
+      
+      if(expirations > 0)
+        handle_key_sym(main_keyboard.last_key_sym);
 
     }
 
