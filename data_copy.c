@@ -18,10 +18,10 @@ void copy_data_to_fd(const char* mime_type, int32_t fd){
       strcmp(mime_type, "text/plain") == 0) {
 
 
-      //TODO calback for get selection
-     // char* my_selection = getsel();
-     //
-     //  write(fd, my_selection, strlen(my_selection));
+    char* my_selection = pway->get_text(); 
+    printf("primary selection: %s\n",my_selection);
+
+    write(fd, my_selection, strlen(my_selection));
 
   }
   close(fd);

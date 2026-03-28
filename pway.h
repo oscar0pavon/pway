@@ -21,6 +21,7 @@ typedef struct PWay{
   void (*click)(void);
   void (*click_release)(void);
   void (*update_mouse)(void);
+  char* (*get_text)(void);
   
 }PWay;
 
