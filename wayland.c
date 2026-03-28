@@ -1,4 +1,5 @@
 #include "wayland.h"
+#include "cursor_shape_protocol.h"
 #include "keyboard.h"
 #include "primary_selection.h"
 #include <complex.h>
@@ -88,19 +89,19 @@ bool is_registry_name(const char* name1, const char* name2){
 void register_global(void *data, Registry *registry, uint32_t name_id,
     const char *interface_name, uint32_t version) {
 
-  PWayland *terminal = (PWayland*)data;
+  PWayland *way = (PWayland*)data;
 
   if (is_registry_name(interface_name, wl_compositor_interface.name) ) {
 
     initialization.compositor = true;
-    terminal->compositor =
+    way->compositor =
         wl_registry_bind(registry, name_id, &wl_compositor_interface, 4);
 
   } else if (is_registry_name(interface_name, xdg_wm_base_interface.name) ) {
 
     initialization.desktop = true;
 
-    terminal->desktop =
+    way->desktop =
         wl_registry_bind(registry, name_id, &xdg_wm_base_interface, 1);
 
   } else if (is_registry_name(interface_name, wl_shm_interface.name)) {
@@ -110,12 +111,12 @@ void register_global(void *data, Registry *registry, uint32_t name_id,
 
   } else if (is_registry_name(interface_name, wl_seat_interface.name)) {
 
-    terminal->seat = wl_registry_bind(registry, name_id, &wl_seat_interface, 4);
+    way->seat = wl_registry_bind(registry, name_id, &wl_seat_interface, 4);
 
     configure_input(&wayland);
 
   } else if( is_registry_name(interface_name, wl_data_device_manager_interface.name)){
-    terminal->data_device_manager = wl_registry_bind(
+    way->data_device_manager = wl_registry_bind(
           registry,
           name_id,
           &wl_data_device_manager_interface,
@@ -127,8 +128,13 @@ void register_global(void *data, Registry *registry, uint32_t name_id,
       wl_registry_bind(registry, name_id,
           &zwp_primary_selection_device_manager_v1_interface, 1);
 
-    printf("Primary selection global detected\n");
     configure_selection();
+
+  } else if ( is_registry_name(interface_name, wp_cursor_shape_manager_v1_interface.name)){
+
+    way->cursor_shape_manager = wl_registry_bind(registry, name_id, 
+        &wp_cursor_shape_manager_v1_interface, 1);
+
   }
 
 }

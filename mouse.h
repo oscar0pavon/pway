@@ -39,4 +39,6 @@ void release_mouse_button();
 
 void clean_mouse_buttons();
 
+void init_cursor_shape_protocol();
+
 #endif

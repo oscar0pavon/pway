@@ -2,6 +2,7 @@
 #define WAYLAND_H
 
 #include "xdg_protocol.h"
+#include "cursor_shape_protocol.h"
 
 #include <stdbool.h>
 #include <sys/poll.h>
@@ -29,6 +30,8 @@ typedef struct PWayland{
     struct wl_data_device_manager *data_device_manager;
     struct wl_data_device *data_device;
     struct wl_data_offer *active_data_offer;
+    struct wp_cursor_shape_manager_v1 *cursor_shape_manager;
+    struct wp_cursor_shape_device_v1 *cursor_shape_device;
 }PWayland;
 
 

@@ -4,22 +4,24 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-//#include "../mouse.h"
-#include "copy_paste.h"
-//#include "../terminal.h"
+#include "cursor_shape_protocol.h"
 #include "pway.h"
 #include "wayland.h"
 
+
+void init_cursor_shape_protocol(){
+  wayland.cursor_shape_device =
+    wp_cursor_shape_manager_v1_get_pointer(wayland.cursor_shape_manager,
+        wayland.pointer);
+
+}
 
 static void pointer_handle_enter(void *data, struct wl_pointer *pointer,
                                  uint32_t serial, struct wl_surface *surface,
                                  wl_fixed_t sx, wl_fixed_t sy) {
     PWayland* term = data;
-    //TODO show the updated cursor
-    // Set the cursor image every time we enter the surface
-    // wl_pointer_set_cursor(pointer, serial, term->cursor_surface, 
-    //                       term->cursor_image->hotspot_x, 
-    //                       term->cursor_image->hotspot_y);
+    wp_cursor_shape_device_v1_set_shape(wayland.cursor_shape_device,
+        serial, WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_DEFAULT);
 }
 
 static void pointer_handle_motion(void *data, struct wl_pointer *pointer,
@@ -166,5 +168,7 @@ void configure_mouse(void){
 
   pway->mouse.wheel_up.id = 65;
   pway->mouse.wheel_down.id = 64;
+  
+  init_cursor_shape_protocol();
   
 }
