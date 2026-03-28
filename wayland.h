@@ -32,7 +32,7 @@ typedef struct PWayland{
 }PWayland;
 
 
-extern PWayland wayland_terminal;
+extern PWayland wayland;
 
 
 bool init_wayland(void);

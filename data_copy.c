@@ -81,7 +81,7 @@ void pway_primary_copy(){
                                                 pway->mouse.last_input_serial);
 
 
-  wl_display_flush(wayland_terminal.display);
+  wl_display_flush(wayland.display);
 
   printf("perfomed primary copy\n");
   
@@ -90,7 +90,7 @@ void pway_primary_copy(){
 void perform_copy( uint32_t serial) {
 
     struct wl_data_source *source = wl_data_device_manager_create_data_source(
-        wayland_terminal.data_device_manager);
+        wayland.data_device_manager);
 
     wl_data_source_add_listener(source, &data_source_listener, NULL);
     
@@ -98,6 +98,6 @@ void perform_copy( uint32_t serial) {
     wl_data_source_offer(source, "UTF8_STRING");               // Legacy X11/XWayland compatibility
     wl_data_source_offer(source, "text/plain");                // Standard fallback
     
-    wl_data_device_set_selection(wayland_terminal.data_device, source, serial);
-    wl_display_flush(wayland_terminal.display);
+    wl_data_device_set_selection(wayland.data_device, source, serial);
+    wl_display_flush(wayland.display);
 }

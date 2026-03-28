@@ -162,7 +162,7 @@ static const struct wl_pointer_listener pointer_listener = {
 
 void configure_mouse(void){
 
-  wl_pointer_add_listener(wayland_terminal.pointer, &pointer_listener, &wayland_terminal);
+  wl_pointer_add_listener(wayland.pointer, &pointer_listener, &wayland);
 
   pway->mouse.wheel_up.id = 65;
   pway->mouse.wheel_down.id = 64;

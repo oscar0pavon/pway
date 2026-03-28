@@ -218,7 +218,7 @@ static const struct wl_keyboard_listener keyboard_listener = {
 
 void configure_keyboard(void){
 
-  wl_keyboard_add_listener(wayland_terminal.keyboard, &keyboard_listener, &wayland_terminal);
+  wl_keyboard_add_listener(wayland.keyboard, &keyboard_listener, &wayland);
 
 
 }

@@ -40,7 +40,7 @@ void configure_selection(void){
  primary_selection.device =
    zwp_primary_selection_device_manager_v1_get_device(
        primary_selection.primary_selection_manager, 
-       wayland_terminal.seat);
+       wayland.seat);
 
  zwp_primary_selection_device_v1_add_listener(primary_selection.device, 
      &primary_device_listener, NULL);

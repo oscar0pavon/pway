@@ -9,7 +9,7 @@
 
 void paste_from_clipboard(bool is_primary){
   if(!is_primary){
-    if(!wayland_terminal.active_data_offer){
+    if(!wayland.active_data_offer){
       printf("None data to paste\n");
       return;
     }
@@ -20,9 +20,9 @@ void paste_from_clipboard(bool is_primary){
 
   if(!is_primary){
 
-    if(wayland_terminal.active_data_offer){
+    if(wayland.active_data_offer){
 
-      wl_data_offer_receive(wayland_terminal.active_data_offer, 
+      wl_data_offer_receive(wayland.active_data_offer, 
           "text/plain", fds[1]);
     }
 
@@ -36,7 +36,7 @@ void paste_from_clipboard(bool is_primary){
 
   close(fds[1]);
 
-  wl_display_dispatch(wayland_terminal.display);
+  wl_display_dispatch(wayland.display);
 
   char buffer[1024];
   ssize_t data_lenght;

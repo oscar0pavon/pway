@@ -25,8 +25,8 @@ PWay* pway_init(){
 
   bool status = init_wayland();
   
-  pway_display = wayland_terminal.display;
-  pway_surface = wayland_terminal.wayland_surface;
+  pway_display = wayland.display;
+  pway_surface = wayland.wayland_surface;
 
 
   struct pollfd wayland_poll = {pway->fd, POLLIN, 0};
@@ -44,7 +44,7 @@ PWay* pway_init(){
 
 bool pway_create_window(const char* name){
 
-  xdg_toplevel_set_title(wayland_terminal.window, name);
+  xdg_toplevel_set_title(wayland.window, name);
 
   return true;
 
@@ -52,6 +52,6 @@ bool pway_create_window(const char* name){
 
 void pway_finish(void){
 
-  wl_display_disconnect(wayland_terminal.display);
+  wl_display_disconnect(wayland.display);
 }
 

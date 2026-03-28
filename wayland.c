@@ -16,7 +16,7 @@
 #include "pway.h"
 #include "selection.h"
 
-PWayland wayland_terminal = {};
+PWayland wayland = {};
 
 typedef struct WaylandInitialization{
   bool compositor;
@@ -112,7 +112,7 @@ void register_global(void *data, Registry *registry, uint32_t name_id,
 
     terminal->seat = wl_registry_bind(registry, name_id, &wl_seat_interface, 4);
 
-    configure_input(&wayland_terminal);
+    configure_input(&wayland);
 
   } else if( is_registry_name(interface_name, wl_data_device_manager_interface.name)){
     terminal->data_device_manager = wl_registry_bind(
@@ -141,15 +141,15 @@ RegistryListener registry_listener = {
 };
 
 void pway_prepare_to_read_events(){
-  while(wl_display_prepare_read(wayland_terminal.display) != 0)
-    wl_display_dispatch_pending(wayland_terminal.display);
+  while(wl_display_prepare_read(wayland.display) != 0)
+    wl_display_dispatch_pending(wayland.display);
 
-  wl_display_flush(wayland_terminal.display);
+  wl_display_flush(wayland.display);
 }
 
 void* run_wayland_loop(void*none){
   
-  while(wl_display_dispatch(wayland_terminal.display)){
+  while(wl_display_dispatch(wayland.display)){
    //events 
   }
 
@@ -165,56 +165,56 @@ void pway_handle_events(){
   }
 
   if(pway->fds[0].revents & POLLIN){
-    wl_display_read_events(wayland_terminal.display);
+    wl_display_read_events(wayland.display);
     //printf("wayland poll\n");
   }else{
-    wl_display_cancel_read(wayland_terminal.display);
+    wl_display_cancel_read(wayland.display);
   }
 
-  wl_display_dispatch_pending(wayland_terminal.display);
+  wl_display_dispatch_pending(wayland.display);
 
   handle_repeat_keys();
 
 }
 
 bool init_wayland() {
-  wayland_terminal.display = wl_display_connect(NULL);
-  if(wayland_terminal.display == NULL){
+  wayland.display = wl_display_connect(NULL);
+  if(wayland.display == NULL){
     printf("Can't get Wayland display, trying Xorg\n");
     return false;
   }
 
-  wayland_terminal.registry = wl_display_get_registry(wayland_terminal.display);
+  wayland.registry = wl_display_get_registry(wayland.display);
 
-  wl_registry_add_listener(wayland_terminal.registry, &registry_listener, 
-      &wayland_terminal);
+  wl_registry_add_listener(wayland.registry, &registry_listener, 
+      &wayland);
 
-  wl_display_roundtrip(wayland_terminal.display);
+  wl_display_roundtrip(wayland.display);
 
 
   bool init = handle_wayland_initialization();
   if(!init)
     return false;
 
-  wayland_terminal.wayland_surface =
-      wl_compositor_create_surface(wayland_terminal.compositor);
+  wayland.wayland_surface =
+      wl_compositor_create_surface(wayland.compositor);
 
-  wayland_terminal.desktop_surface = xdg_wm_base_get_xdg_surface(
-      wayland_terminal.desktop, wayland_terminal.wayland_surface);
+  wayland.desktop_surface = xdg_wm_base_get_xdg_surface(
+      wayland.desktop, wayland.wayland_surface);
 
-  xdg_surface_add_listener(wayland_terminal.desktop_surface, &surface_listener,
-                           &wayland_terminal);
+  xdg_surface_add_listener(wayland.desktop_surface, &surface_listener,
+                           &wayland);
 
-  wayland_terminal.window = xdg_surface_get_toplevel(wayland_terminal.desktop_surface);
+  wayland.window = xdg_surface_get_toplevel(wayland.desktop_surface);
   
-  xdg_toplevel_add_listener(wayland_terminal.window, &window_listener, &wayland_terminal);
+  xdg_toplevel_add_listener(wayland.window, &window_listener, &wayland);
 
 
-  wl_surface_commit(wayland_terminal.wayland_surface);
-  wl_display_flush(wayland_terminal.display);
+  wl_surface_commit(wayland.wayland_surface);
+  wl_display_flush(wayland.display);
 
 
-  pway->fd = wl_display_get_fd(wayland_terminal.display);
+  pway->fd = wl_display_get_fd(wayland.display);
   init_keyboard_reapeat_handler();
 
   configure_data();

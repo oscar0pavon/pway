@@ -1,8 +1,7 @@
 #include "data.h"
-#include "wayland.h"
 #include <wayland-client-protocol.h>
 #include <string.h>
-#include "mouse.h"
+#include "wayland.h"
 
 static void data_offer_handle_offer(void *data, struct wl_data_offer *offer,
                                     const char *mime_type) {
@@ -46,11 +45,11 @@ static void data_device_handle_selection(void *data, struct wl_data_device *data
                                          struct wl_data_offer *offer) {
     //struct wayland_terminal *term = data;
 
-    if(wayland_terminal.active_data_offer){
-      wl_data_offer_destroy(wayland_terminal.active_data_offer);
+    if(wayland.active_data_offer){
+      wl_data_offer_destroy(wayland.active_data_offer);
     }
 
-    wayland_terminal.active_data_offer = offer;
+    wayland.active_data_offer = offer;
 
     // This 'offer' is now the current clipboard content.
     // You typically store this pointer to use when the user hits 'Paste'.
@@ -68,12 +67,12 @@ static const struct wl_data_device_listener data_device_listener = {
 
 void configure_data(){
 
-  wayland_terminal.data_device = wl_data_device_manager_get_data_device(
-      wayland_terminal.data_device_manager, 
-      wayland_terminal.seat);
+  wayland.data_device = wl_data_device_manager_get_data_device(
+      wayland.data_device_manager, 
+      wayland.seat);
 
-  wl_data_device_add_listener(wayland_terminal.data_device, 
+  wl_data_device_add_listener(wayland.data_device, 
       &data_device_listener, 
-      &wayland_terminal);
+      &wayland);
 
 }
