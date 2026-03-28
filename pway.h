@@ -18,6 +18,10 @@ typedef struct PWay{
   void (*exit)(void);
   void (*focus)(bool is_focuses);
   void (*input)(const char* text, int len);
+  void (*click)(void);
+  void (*click_release)(void);
+  void (*update_mouse)(void);
+  
 }PWay;
 
 PWay* pway_init();

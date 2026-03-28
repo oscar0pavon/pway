@@ -26,25 +26,23 @@ static void pointer_handle_motion(void *data, struct wl_pointer *pointer,
                                   uint32_t time, wl_fixed_t sx, wl_fixed_t sy) {
   PWayland *term = data;
  
-  //TODO handle program mouse report
-  //main_mouse.x = wl_fixed_to_double(sx);
-  //main_mouse.y = wl_fixed_to_double(sy);
+  pway->mouse.x = wl_fixed_to_double(sx);
+  pway->mouse.y = wl_fixed_to_double(sy);
 
-  //update_mouse_terminal_position();
+  pway->update_mouse();
  
-  //handle_mouse_motion(true);
 
 }
 
 void press_button(){
 
   if(pway->mouse.current_button){
-
     pway->mouse.current_button->pressed = true;
     pway->mouse.current_button->released = false;
-
   }
-  //mouse_click(); //TODO handle program click
+
+  pway->click();
+
 }
 
 void clean_mouse_buttons(){
@@ -65,6 +63,9 @@ void release_mouse_button(){
     pway->mouse.current_button->released = true;
 
   }
+
+  pway->click_release();
+
 }
 
 static void pointer_handle_button(void *data, struct wl_pointer *pointer,
@@ -109,7 +110,6 @@ static void pointer_handle_button(void *data, struct wl_pointer *pointer,
 
     release_mouse_button();
 
-    //release_button();
 
     
   }
