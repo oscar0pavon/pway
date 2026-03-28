@@ -2,6 +2,7 @@
 #define WMOUSE_H
 
 #include <stdint.h>
+#include "copy_paste.h"
 
 #define Button1     1
 #define Button2     2

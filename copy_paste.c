@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <wayland-client-protocol.h>
 #include "selection.h"
+#include "pway.h"
 
 void paste_from_clipboard(bool is_primary){
   if(!is_primary){
@@ -41,10 +42,11 @@ void paste_from_clipboard(bool is_primary){
   ssize_t data_lenght;
   while ((data_lenght = read(fds[0], buffer, sizeof(buffer) - 1)) > 0) {
       buffer[data_lenght] = '\0';
-      //TODO calback
-      //write_to_tty(buffer, data_lenght, 0);
-      //printf("Received text: %s\n", buffer);
+      pway->input(buffer, data_lenght);
+      printf("Received text: %s\n", buffer);
   }
   
   close(fds[0]);
+  
+  printf("pway pasting\n");
 }
