@@ -76,43 +76,52 @@ WindowListener window_listener = {
   .close = handle_exit
 };
 
+bool is_registry_name(const char* name1, const char* name2){
+
+  if (strcmp(name1, name2) == 0) {
+    return true;
+  }else {
+    return false;
+  }
+}
+
 void register_global(void *data, Registry *registry, uint32_t name_id,
     const char *interface_name, uint32_t version) {
 
   PWayland *terminal = (PWayland*)data;
 
-  if (strcmp(interface_name, wl_compositor_interface.name) == 0) {
+  if (is_registry_name(interface_name, wl_compositor_interface.name) ) {
 
     initialization.compositor = true;
     terminal->compositor =
         wl_registry_bind(registry, name_id, &wl_compositor_interface, 4);
 
-  } else if (strcmp(interface_name, xdg_wm_base_interface.name) == 0) {
+  } else if (is_registry_name(interface_name, xdg_wm_base_interface.name) ) {
 
     initialization.desktop = true;
 
     terminal->desktop =
         wl_registry_bind(registry, name_id, &xdg_wm_base_interface, 1);
 
-  } else if (strcmp(interface_name, wl_shm_interface.name) == 0) {
+  } else if (is_registry_name(interface_name, wl_shm_interface.name)) {
 
     wl_registry_bind(registry, name_id, &wl_shm_interface, 1);
 
 
-  } else if (strcmp(interface_name, wl_seat_interface.name) == 0) {
+  } else if (is_registry_name(interface_name, wl_seat_interface.name)) {
 
     terminal->seat = wl_registry_bind(registry, name_id, &wl_seat_interface, 4);
 
     configure_input(&wayland_terminal);
 
-  } else if( strcmp(interface_name, wl_data_device_manager_interface.name) == 0){
+  } else if( is_registry_name(interface_name, wl_data_device_manager_interface.name)){
     terminal->data_device_manager = wl_registry_bind(
           registry,
           name_id,
           &wl_data_device_manager_interface,
           3
         );
-  } else if (strcmp(interface_name, "zwp_primary_selection_device_manager_v1") == 0) {
+  } else if ( is_registry_name(interface_name, "zwp_primary_selection_device_manager_v1") ) {
 
     primary_selection.primary_selection_manager = 
       wl_registry_bind(registry, name_id,
@@ -201,8 +210,7 @@ bool init_wayland() {
   xdg_toplevel_add_listener(wayland_terminal.window, &window_listener, &wayland_terminal);
 
 
-  //wl_display_roundtrip(wayland_terminal.display);
-  wl_surface_commit(wayland_terminal.wayland_surface);//TODO
+  wl_surface_commit(wayland_terminal.wayland_surface);
   wl_display_flush(wayland_terminal.display);
 
 
