@@ -34,9 +34,16 @@ void paste_from_clipboard(bool is_primary){
     }
   }
 
-  close(fds[1]);
+  wl_display_flush(wayland.display);
 
-  wl_display_dispatch(wayland.display);
+  close(fds[1]);
+  while (wl_display_prepare_read(wayland.display) != 0) {
+      wl_display_dispatch_pending(wayland.display);
+  }
+  wl_display_flush(wayland.display);
+  wl_display_read_events(wayland.display);
+  wl_display_dispatch_pending(wayland.display);
+
 
   char buffer[1024];
   ssize_t data_lenght;
