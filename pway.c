@@ -2,11 +2,18 @@
 #include "wayland.h"
 #include <stdlib.h>
 #include <stdbool.h>
+#include "egl.h"
 
 PWay* pway;
 
 struct wl_display *pway_display;
 struct wl_surface *pway_surface;
+
+
+
+void pway_init_egl(){
+  init_egl();
+}
 
 bool pway_app_has_event(){
   
@@ -42,9 +49,11 @@ PWay* pway_init(){
   return pway;  
 }
 
-bool pway_create_window(const char* name){
+bool pway_create_window(const char* name, int width, int height){
 
   xdg_toplevel_set_title(wayland.window, name);
+  pway->width = width;
+  pway->height = height;
 
   return true;
 

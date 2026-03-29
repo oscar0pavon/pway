@@ -22,6 +22,8 @@ typedef struct PWay{
   void (*click_release)(void);
   void (*update_mouse)(void);
   char* (*get_text)(void);
+  int width;
+  int height;
   
 }PWay;
 
@@ -31,12 +33,18 @@ void pway_set_app_fd(int fd);
 
 bool pway_app_has_event();
 
-bool pway_create_window(const char* name);
+bool pway_create_window(const char* name, int width, int height);
 
 void pway_prepare_to_read_events();
 void pway_handle_events();
 
 void pway_finish(void);
+
+void pway_egl_resize(int width, int height);
+
+void pway_init_egl();
+
+void pway_swap_buffers();
 
 void pway_primary_copy();
 
