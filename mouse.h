@@ -10,24 +10,24 @@
 #define Button4     4
 #define Button5     5
 
-typedef struct PMouseButton{
+typedef struct PPressEvent{
   uint32_t id;
   bool pressed;
   bool released;
-}PMouseButton;
+}PPressEvent;
 
 typedef struct PMouse {
   uint32_t x;
   uint32_t y;
 
-  PMouseButton* current_button;
+  PPressEvent* current_button;
 
-  PMouseButton left_button;
-  PMouseButton right_button;
-  PMouseButton middle_button;
+  PPressEvent left_button;
+  PPressEvent right_button;
+  PPressEvent middle_button;
 
-  PMouseButton wheel_up;
-  PMouseButton wheel_down;
+  PPressEvent wheel_up;
+  PPressEvent wheel_down;
   
   uint32_t last_input_serial;
 
