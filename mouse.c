@@ -119,10 +119,8 @@ static void pointer_handle_axis(void *data, struct wl_pointer *pointer,
 
     if(value < 0){
       
-      // if(is_on_mouse_mode()){
-      //   main_mouse.current_button = &main_mouse.wheel_down;
-      //   press_button();
-      // }
+        pway->mouse.current_button = &pway->mouse.wheel_down;
+        release_mouse_button();
 
       // if(!is_on_mouse_mode()){
       //  Arg new_arg;
@@ -136,8 +134,8 @@ static void pointer_handle_axis(void *data, struct wl_pointer *pointer,
       //   new_arg.f = -0.1f;
       //   kscrolldown(&new_arg);
       // }else{
-      //   main_mouse.current_button = &main_mouse.wheel_up;
-      //   press_button();
+        pway->mouse.current_button = &pway->mouse.wheel_up;
+        release_mouse_button();
       //
       // }
     }
