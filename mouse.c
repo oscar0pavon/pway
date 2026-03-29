@@ -8,6 +8,15 @@
 #include "pway.h"
 #include "wayland.h"
 
+void pway_set_text_cursor(){
+  wp_cursor_shape_device_v1_set_shape(wayland.cursor_shape_device, pway->mouse.last_input_serial, 
+      WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_TEXT);
+}
+
+void pway_set_default_cursor(){
+  wp_cursor_shape_device_v1_set_shape(wayland.cursor_shape_device, pway->mouse.last_input_serial, 
+      WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_DEFAULT);
+}
 
 void init_cursor_shape_protocol(){
   wayland.cursor_shape_device =

@@ -41,4 +41,8 @@ void clean_mouse_buttons();
 
 void init_cursor_shape_protocol();
 
+void pway_set_text_cursor();
+
+void pway_set_default_cursor();
+
 #endif
