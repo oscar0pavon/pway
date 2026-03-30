@@ -1,6 +1,7 @@
 #include "wayland.h"
 #include "cursor_shape_protocol.h"
 #include "keyboard.h"
+#include "mouse.h"
 #include "primary_selection.h"
 #include <complex.h>
 #include <stdbool.h>
@@ -153,6 +154,10 @@ void pway_prepare_to_read_events(){
   wl_display_flush(wayland.display);
 }
 
+void pway_handle_events_pressed(){
+  clean_mouse_buttons();
+}
+
 void* run_wayland_loop(void*none){
   
   while(wl_display_dispatch(wayland.display)){
@@ -180,6 +185,9 @@ void pway_handle_events(){
   wl_display_dispatch_pending(wayland.display);
 
   handle_repeat_keys();
+
+ 
+  clean_mouse_buttons(); 
 
 }
 
