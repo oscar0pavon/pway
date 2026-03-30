@@ -28,6 +28,7 @@ install: all
 	mkdir -p /usr/local/include/pway
 	cp -f pway.h /usr/local/include/pway
 	cp -f mouse.h /usr/local/include/pway
+	cp -f keyboard.h /usr/local/include/pway
 	cp -f copy_paste.h /usr/local/include/pway
 
 

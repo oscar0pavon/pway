@@ -2,6 +2,7 @@
 #define WKEYBOARD_H
 
 
+#include "mouse.h"
 #include <stdint.h>
 #include <wayland-client-protocol.h>
 #include <xkbcommon/xkbcommon.h>
@@ -21,6 +22,11 @@ typedef struct Keyboard {
 
 } Keyboard;
 
+typedef struct PKey {
+  xkb_keysym_t sym;
+  PPressEvent event;
+}PKey;
+
 void configure_keyboard(void);
 
 void init_keyboard_reapeat_handler();
@@ -30,5 +36,6 @@ void handle_repeat_keys();
 void handle_key_sym(xkb_keysym_t sym);
 
 extern Keyboard main_keyboard;
+extern PKey pway_current_key;
 
 #endif

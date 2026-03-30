@@ -5,7 +5,6 @@
 #include <bits/time.h>
 #include <bits/types/struct_itimerspec.h>
 #include <stdbool.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/timerfd.h>
@@ -20,6 +19,7 @@
 #include "mouse.h"
 
 Keyboard main_keyboard;
+PKey pway_current_key;
 
 void stop_repeat_time(){
   struct itimerspec stop = {0};
@@ -91,8 +91,6 @@ void handle_key_sym(xkb_keysym_t sym){
     }
   }
 
-  //TODO handle spectial keys
-  //if(print_special_key(sym)) return;
 
   if(ctrl_pressed){
       // Handle Ctrl
@@ -108,11 +106,17 @@ void handle_key_sym(xkb_keysym_t sym){
   }
 
   if (len > 0) {
-    if (!ctrl_pressed)
+    if (!ctrl_pressed){
       pway->input(buf, len - 1);
-    else
+      return;
+    }
+    else{
       pway->input(buf, len);
+      return;
+    }
   }
+  
+  pway->update_keys();
 
 }
 
@@ -155,6 +159,8 @@ void handle_repeat_keys(){
 
 }
 
+
+
 static void keyboard_handle_key(void *data, struct wl_keyboard *keyboard,
                                 uint32_t serial, uint32_t time, uint32_t key,
                                 uint32_t state) {
@@ -164,7 +170,13 @@ static void keyboard_handle_key(void *data, struct wl_keyboard *keyboard,
                                  //
   xkb_keysym_t sym = xkb_state_key_get_one_sym(main_keyboard.state, usable_key);
 
+  pway_current_key.sym = sym;
+
+
   if (state == WL_KEYBOARD_KEY_STATE_PRESSED) {
+
+    pway_current_key.event.released= false;
+    pway_current_key.event.pressed = true;
 
     main_keyboard.last_input_serial = serial;
 
@@ -178,6 +190,9 @@ static void keyboard_handle_key(void *data, struct wl_keyboard *keyboard,
     }
 
   }else if( state == WL_KEYBOARD_KEY_STATE_RELEASED){
+
+    pway_current_key.event.released = true;
+    pway_current_key.event.pressed = false;
 
     if(usable_key == main_keyboard.last_key_code){
       stop_repeat_time();
