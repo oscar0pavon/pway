@@ -3,6 +3,8 @@
 
 
 #include <stdbool.h>
-void paste_from_clipboard(bool is_primary);
+void pway_paste(bool is_primary);
+
+void pway_can_paste();
 
 #endif

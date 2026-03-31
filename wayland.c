@@ -167,29 +167,6 @@ void* run_wayland_loop(void*none){
   return NULL;
 }
 
-void pway_handle_events(){
-
-  pway_prepare_to_read_events();
-
-  if (poll(pway->fds, 3, -1) == -1) {
-    perror("Poll in fds, APP or Wayland, Keyboard timer");
-  }
-
-  if(pway->fds[0].revents & POLLIN){
-    wl_display_read_events(wayland.display);
-    //printf("wayland poll\n");
-  }else{
-    wl_display_cancel_read(wayland.display);
-  }
-
-  wl_display_dispatch_pending(wayland.display);
-
-  handle_repeat_keys();
-
- 
-  clean_mouse_buttons(); 
-
-}
 
 bool init_wayland() {
   wayland.display = wl_display_connect(NULL);

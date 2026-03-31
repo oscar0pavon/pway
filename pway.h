@@ -11,7 +11,8 @@ typedef struct PWay{
   PMouse mouse;
   int fd;
   int keys_timer_fd;
-  struct pollfd fds[3];
+  struct pollfd fds[4];
+  int paste_fds[2];
   struct pollfd *events_fds;
   struct pollfd *app_fd;
   void (*resize)(int x,int y);

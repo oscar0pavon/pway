@@ -7,53 +7,71 @@
 #include "selection.h"
 #include "pway.h"
 
-void paste_from_clipboard(bool is_primary){
-  if(!is_primary){
-    if(!wayland.active_data_offer){
-      printf("None data to paste\n");
-      return;
-    }
-  }
+void pway_update_wayland_paste_events(){
 
-  int fds[2];
-  if (pipe(fds) == -1) return; // Create a Unix pipe
-
-  if(!is_primary){
-
-    if(wayland.active_data_offer){
-
-      wl_data_offer_receive(wayland.active_data_offer, 
-          "text/plain", fds[1]);
-    }
-
-  }else{
-
-    if(primary_selection.offer){
-      zwp_primary_selection_offer_v1_receive(primary_selection.offer,
-          "text/plain", fds[1]);
-    }
-  }
-
-  wl_display_flush(wayland.display);
-
-  close(fds[1]);
   while (wl_display_prepare_read(wayland.display) != 0) {
       wl_display_dispatch_pending(wayland.display);
   }
   wl_display_flush(wayland.display);
   wl_display_read_events(wayland.display);
   wl_display_dispatch_pending(wayland.display);
+}
 
-
-  char buffer[1024];
-  ssize_t data_lenght;
-  while ((data_lenght = read(fds[0], buffer, sizeof(buffer) - 1)) > 0) {
-      buffer[data_lenght] = '\0';
-      pway->input(buffer, data_lenght);
-      printf("Received text: %s\n", buffer);
+void pway_can_paste(){
+  if( pway->fds[3].revents & POLLIN){
+    printf("pasting event\n");
+    char buffer[1024];
+    ssize_t n = read(pway->paste_fds[0], buffer, sizeof(buffer) - 1);
+    if (n > 0) {
+        buffer[n] = '\0';
+        pway->input(buffer, n);
+        printf("Received: %s\n", buffer);
+    } else if (n == 0) {
+        pway->fds[3].fd = -1; // Stop polling paste FD
+        close(pway->paste_fds[0]);
+    } 
   }
-  
-  close(fds[0]);
+}
+
+void pway_paste(bool is_primary){
+  if(!is_primary){
+    if(!wayland.active_data_offer){
+      printf("None data to paste\n");
+      return;
+    }
+  }else{
+    if(!primary_selection.offer){
+      printf("None data to paste from primary\n");
+      return;
+    }
+  }
+
+  if (pipe(pway->paste_fds) == -1) return; // Create a Unix pipe
+
+  if(!is_primary){
+
+    if(wayland.active_data_offer){
+
+      wl_data_offer_receive(wayland.active_data_offer, 
+          "text/plain", pway->paste_fds[1]);
+    }
+
+  }else{
+    
+    if(primary_selection.offer){
+      zwp_primary_selection_offer_v1_receive(primary_selection.offer,
+          "text/plain", pway->paste_fds[1]);
+    }
+  }
+
+  wl_display_flush(wayland.display);
+
+  close(pway->paste_fds[1]);
+
+
+  pway_update_wayland_paste_events();
+  pway->fds[3].fd = pway->paste_fds[0];
+
   
   printf("pway pasting\n");
 }
