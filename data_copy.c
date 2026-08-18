@@ -19,9 +19,12 @@ void copy_data_to_fd(const char* mime_type, int32_t fd){
 
 
     char* my_selection = pway->get_text(); 
-    printf("primary selection: %s\n",my_selection);
 
-    write(fd, my_selection, strlen(my_selection));
+    if(my_selection){
+      printf("primary selection: %s\n",my_selection);
+
+      write(fd, my_selection, strlen(my_selection));
+    }
 
   }
   close(fd);

@@ -39,6 +39,8 @@ The Wayland protocol sources (`xdg_protocol`, `primary_selection`,
 
 int main(){
   pway = pway_init();
+  if(pway == NULL)
+    return 1;
 
   pway->resize = resize_pterminal;
   pway->exit = end_window;
@@ -69,8 +71,10 @@ The order matters: `pway_init()` connects to the compositor and creates the surf
 `pway_create_window()` sets the title and the size, and `pway_init_egl()` uses that size
 to create the EGL window. Calling `pway_init_egl()` first gives a 0x0 surface.
 
-All the callbacks above are called without checking for `NULL`, and `pway_init()` does
-not zero the struct, so assign every one of them before entering the loop.
+`pway_init()` installs a no-op default for every callback, so you only need to assign
+the ones you care about. Do not set one back to `NULL` — they are called
+unconditionally. The default `exit` does nothing, which means the window will ignore the
+compositor's close request until you assign your own.
 
 Handle resizing by forwarding the new size to EGL:
 
@@ -96,6 +100,9 @@ void resize_pterminal(int width, int height){
 | `void update_mouse(void)` | the pointer moved |
 | `char* get_text(void)` | the compositor requests the text to copy; return the current selection |
 
+Anything you leave unset is a no-op, and the default `get_text` returns an empty string.
+Returning `NULL` from your own `get_text` is also accepted and copies nothing.
+
 `len` is the byte count of `text`, which the library NUL-terminates as well (with Ctrl
 held and a non-letter key, `len` currently counts that trailing NUL too). Pasted text
 arrives asynchronously, one or more loop iterations after the paste was requested.
@@ -112,6 +119,9 @@ void  pway_init_egl(void);
 void  pway_egl_resize(int width, int height);
 void  pway_swap_buffers(void);
 ```
+
+`pway_init()` returns `NULL` if it cannot allocate, and otherwise returns the same
+pointer as the global `pway`.
 
 `pway_handle_events()` is one iteration of the main loop: it polls the Wayland
 connection, the key repeat timer, the application fd and the paste pipe, dispatches

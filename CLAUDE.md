@@ -54,10 +54,13 @@ Naming convention: public functions are `pway_*`, public types are `P`-prefixed
 
 ### Callbacks are the whole API
 
-The app fills in function pointers on `pway` (see README for the list). The library
-calls them **unconditionally, without NULL checks**, and `pway_init` uses plain `malloc`
-with no zeroing — so an unassigned callback is a jump to garbage, not a no-op. When you
-add a callback, either assign it a default in `pway_init` or document it as mandatory.
+The app fills in function pointers on `pway` (see README for the list). The library calls
+them **unconditionally, without NULL checks at the call sites** — safety comes from
+`pway_init` allocating with `calloc` and then installing a no-op default for every
+callback via `set_default_callbacks()`, *before* `init_wayland()` runs (the compositor can
+already dispatch events during that roundtrip). Two rules follow: when you add a callback
+give it a default in the same place, and never move `set_default_callbacks()` after
+`init_wayland()`.
 
 ### Startup order matters
 

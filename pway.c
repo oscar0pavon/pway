@@ -1,5 +1,6 @@
 #include "pway.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <stdbool.h>
 #include <error.h>
 #include "egl.h"
@@ -29,9 +30,48 @@ void pway_set_app_fd(int fd){
 }
 
 
+static void default_resize(int x, int y){}
+static void default_exit(void){}
+static void default_focus(bool is_focused){}
+static void default_input(const char* text, int len){}
+static void default_update_keys(void){}
+static void default_click(void){}
+static void default_click_release(void){}
+static void default_update_mouse(void){}
+
+static char no_text[] = "";
+
+static char* default_get_text(void){
+  return no_text;
+}
+
+// Every callback is called unconditionally from the event handling, and the
+// compositor can send events during init_wayland, so these have to be in place
+// before anything else runs. Leaving one unset is fine, setting one to NULL is
+// not.
+static void set_default_callbacks(){
+
+  pway->resize = default_resize;
+  pway->exit = default_exit;
+  pway->focus = default_focus;
+  pway->input = default_input;
+  pway->update_keys = default_update_keys;
+  pway->click = default_click;
+  pway->click_release = default_click_release;
+  pway->update_mouse = default_update_mouse;
+  pway->get_text = default_get_text;
+
+}
+
 PWay* pway_init(){
 
-  pway = malloc(sizeof(PWay));
+  pway = calloc(1, sizeof(PWay));
+  if(pway == NULL){
+    printf("Can't allocate PWay\n");
+    return NULL;
+  }
+
+  set_default_callbacks();
 
   bool status = init_wayland();
   
