@@ -54,15 +54,6 @@ PWay* pway_init(){
   return pway;  
 }
 
-bool pway_create_window(const char* name, int width, int height){
-
-  xdg_toplevel_set_title(wayland.window, name);
-  pway->width = width;
-  pway->height = height;
-
-  return true;
-
-}
 
 void pway_handle_events(){
 
@@ -87,6 +78,16 @@ void pway_handle_events(){
   pway_can_paste();
 
   clean_mouse_buttons(); 
+
+}
+
+bool pway_create_window(const char* name, int width, int height){
+
+  xdg_toplevel_set_title(wayland.window, name);
+  pway->width = width;
+  pway->height = height;
+
+  return true;
 
 }
 void pway_finish(void){
