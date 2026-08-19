@@ -101,6 +101,15 @@ Both go through `pway->get_text()` (app supplies the text to send) and
 - Primary selection (`zwp_primary_selection_v1`): offers in `selection.c`
   (`primary_selection.offer`), copy in `data_copy.c` (`pway_primary_copy`).
 
+**Neither manager is guaranteed to exist.** They are bound from the registry, so a
+compositor that does not advertise them (swordfish does not) leaves
+`wayland.data_device_manager` and `primary_selection.primary_selection_manager` NULL
+and `configure_data()` / `configure_selection()` never build a device. Marshalling a
+request on a NULL proxy is a **segfault inside libwayland-client** — no protocol error,
+no message, the app just dies — so every entry point has to check first.
+`pway_primary_copy()` did not, and finishing a mouse selection under swordfish killed
+the client on the button release.
+
 `pway_paste()` creates a pipe, asks the offer to write into it, then parks the read end
 in `fds[3]` so the actual text arrives on a later loop iteration — pasting is
 asynchronous, never inline.

@@ -67,7 +67,19 @@ static const struct wl_data_source_listener data_source_listener = {
 };
 
 void pway_primary_copy(){
-  struct zwp_primary_selection_source_v1 *source = 
+
+  //a compositor is not obliged to offer zwp_primary_selection_device_manager_v1
+  //- swordfish, for one, does not - and configure_selection() only runs when the
+  //global arrives, so both of these are still NULL. marshalling a request on a
+  //NULL proxy is a segfault inside libwayland-client with no protocol error to
+  //read, which is how finishing a mouse selection killed the client
+  if(primary_selection.primary_selection_manager == NULL ||
+     primary_selection.device == NULL){
+    printf("No primary selection on this compositor, nothing copied\n");
+    return;
+  }
+
+  struct zwp_primary_selection_source_v1 *source =
         zwp_primary_selection_device_manager_v1_create_source(
             primary_selection.primary_selection_manager);
 
