@@ -92,6 +92,10 @@ void pway_primary_copy(){
 
 void perform_copy( uint32_t serial) {
 
+    //configure_data() leaves both NULL when the compositor has no clipboard
+    if(wayland.data_device_manager == NULL || wayland.data_device == NULL)
+      return;
+
     struct wl_data_source *source = wl_data_device_manager_create_data_source(
         wayland.data_device_manager);
 

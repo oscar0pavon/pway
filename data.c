@@ -1,4 +1,5 @@
 #include "data.h"
+#include <stdio.h>
 #include <wayland-client-protocol.h>
 #include <string.h>
 #include "wayland.h"
@@ -66,6 +67,14 @@ static const struct wl_data_device_listener data_device_listener = {
 };
 
 void configure_data(){
+
+  //a compositor is not obliged to offer wl_data_device_manager, and marshalling
+  //a request on a NULL proxy is a segfault inside libwayland, not an error we
+  //get to see. no manager just means no clipboard
+  if(wayland.data_device_manager == NULL){
+    printf("No wl_data_device_manager, clipboard disabled\n");
+    return;
+  }
 
   wayland.data_device = wl_data_device_manager_get_data_device(
       wayland.data_device_manager, 
