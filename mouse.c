@@ -9,16 +9,30 @@
 #include "wayland.h"
 
 void pway_set_text_cursor(){
-  wp_cursor_shape_device_v1_set_shape(wayland.cursor_shape_device, pway->mouse.last_input_serial, 
+  //a compositor that does not offer the cursor shape protocol leaves this
+  //NULL, and the request marshals straight through the proxy pointer
+  if(!wayland.cursor_shape_device)
+    return;
+
+  wp_cursor_shape_device_v1_set_shape(wayland.cursor_shape_device, pway->mouse.last_input_serial,
       WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_TEXT);
 }
 
 void pway_set_default_cursor(){
-  wp_cursor_shape_device_v1_set_shape(wayland.cursor_shape_device, pway->mouse.last_input_serial, 
+  if(!wayland.cursor_shape_device)
+    return;
+
+  wp_cursor_shape_device_v1_set_shape(wayland.cursor_shape_device, pway->mouse.last_input_serial,
       WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_DEFAULT);
 }
 
+//wp_cursor_shape_manager_v1 is optional and swordfish, for one, does not
+//advertise it. binding a request on the NULL proxy that leaves is a segfault
+//inside libwayland-client, with no protocol error to read
 void init_cursor_shape_protocol(){
+  if(!wayland.cursor_shape_manager)
+    return;
+
   wayland.cursor_shape_device =
     wp_cursor_shape_manager_v1_get_pointer(wayland.cursor_shape_manager,
         wayland.pointer);
@@ -29,6 +43,10 @@ static void pointer_handle_enter(void *data, struct wl_pointer *pointer,
                                  uint32_t serial, struct wl_surface *surface,
                                  wl_fixed_t sx, wl_fixed_t sy) {
     PWayland* term = data;
+
+    if(!wayland.cursor_shape_device)
+      return;
+
     wp_cursor_shape_device_v1_set_shape(wayland.cursor_shape_device,
         serial, WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_DEFAULT);
 }
