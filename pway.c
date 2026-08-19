@@ -74,6 +74,8 @@ PWay* pway_init(){
   set_default_callbacks();
 
   bool status = init_wayland();
+  if(!status)
+    return NULL;
   
   pway_display = wayland.display;
   pway_surface = wayland.wayland_surface;

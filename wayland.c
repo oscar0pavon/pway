@@ -171,7 +171,7 @@ void* run_wayland_loop(void*none){
 bool init_wayland() {
   wayland.display = wl_display_connect(NULL);
   if(wayland.display == NULL){
-    printf("Can't get Wayland display, trying Xorg\n");
+    printf("Can't get Wayland display\n");
     return false;
   }
 
