@@ -34,6 +34,7 @@ static void default_resize(int x, int y){}
 static void default_exit(void){}
 static void default_focus(bool is_focused){}
 static void default_input(const char* text, int len){}
+static void default_key(uint32_t key_code, uint32_t state){}
 static void default_update_keys(void){}
 static void default_click(void){}
 static void default_click_release(void){}
@@ -55,6 +56,7 @@ static void set_default_callbacks(){
   pway->exit = default_exit;
   pway->focus = default_focus;
   pway->input = default_input;
+  pway->key = default_key;
   pway->update_keys = default_update_keys;
   pway->click = default_click;
   pway->click_release = default_click_release;

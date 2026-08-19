@@ -26,7 +26,16 @@ typedef struct PWay{
   char* (*get_text)(void);
   int width;
   int height;
-  
+
+  //raw evdev key code and a WL_KEYBOARD_KEY_STATE_*, for both press and
+  //release. input() only carries the utf8 of a press, which is not enough to
+  //forward keys on to somebody else - a nested compositor needs the code and
+  //the release too.
+  //INFO new members go on the end: anything compiled against an older pway.h
+  //keeps the offsets it was built with, and an inserted field silently moves
+  //every one after it
+  void (*key)(uint32_t key_code, uint32_t state);
+
 }PWay;
 
 PWay* pway_init();

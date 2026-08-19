@@ -172,6 +172,10 @@ static void keyboard_handle_key(void *data, struct wl_keyboard *keyboard,
 
   pway_current_key.sym = sym;
 
+  //the raw event, before it is turned into text. presses and releases both,
+  //so an app can pass the key on rather than only read what it typed
+  pway->key(key, state);
+
 
   if (state == WL_KEYBOARD_KEY_STATE_PRESSED) {
 
