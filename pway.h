@@ -48,6 +48,7 @@ bool pway_create_window(const char* name, int width, int height);
 
 void pway_prepare_to_read_events();
 void pway_handle_events();
+void pway_dispatch_events();
 
 void pway_finish(void);
 

@@ -99,13 +99,12 @@ PWay* pway_init(){
 }
 
 
-void pway_handle_events(){
-
-  pway_prepare_to_read_events();
-
-  if (poll(pway->fds, 4, -1) == -1) {
-    perror("Poll in fds, APP or Wayland, Keyboard timer");
-  }
+//the second half of pway_handle_events(), split out so an embedder that polls
+//pway->fds itself (alongside fds of its own) can skip pway's internal poll()
+//and just tell it the read side is ready. pway_prepare_to_read_events() must
+//still be called before that external poll - this only takes over from the
+//poll onward
+void pway_dispatch_events(){
 
   if(pway->fds[0].revents & POLLIN){
     wl_display_read_events(wayland.display);
@@ -118,10 +117,22 @@ void pway_handle_events(){
 
   handle_repeat_keys();
 
-   
+
   pway_can_paste();
 
-  clean_mouse_buttons(); 
+  clean_mouse_buttons();
+
+}
+
+void pway_handle_events(){
+
+  pway_prepare_to_read_events();
+
+  if (poll(pway->fds, 4, -1) == -1) {
+    perror("Poll in fds, APP or Wayland, Keyboard timer");
+  }
+
+  pway_dispatch_events();
 
 }
 
