@@ -46,9 +46,16 @@ bool pway_app_has_event();
 
 bool pway_create_window(const char* name, int width, int height);
 
-void pway_prepare_to_read_events();
+//false means the connection broke while draining the queue: stop driving the
+//loop, the app's exit callback has not been called yet in that case
+bool pway_prepare_to_read_events();
 void pway_handle_events();
 void pway_dispatch_events();
+
+//true once the compositor is gone. pway->exit() has already been called; every
+//further pway_handle_events() is a no-op, so an app that ignores this spins in
+//its own loop instead of quitting
+bool pway_connection_lost(void);
 
 void pway_finish(void);
 

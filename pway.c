@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 #include <error.h>
 #include "egl.h"
 #include "wayland.h"
@@ -99,6 +100,33 @@ PWay* pway_init(){
 }
 
 
+static bool connection_lost = false;
+
+bool pway_connection_lost(void){
+  return connection_lost;
+}
+
+//A compositor that goes away does not stop this loop on its own. The display fd
+//stays readable forever with POLLHUP, and every libwayland call made after the
+//connection breaks returns -1 without touching the socket - so nothing blocks,
+//nothing fails loudly, and poll() spins on a full core until the process is
+//killed. Report it once and hand the app its exit callback.
+static void lose_connection(void){
+
+  if(connection_lost)
+    return;
+
+  connection_lost = true;
+
+  int error = wl_display_get_error(wayland.display);
+
+  printf("Lost the Wayland connection: %s\n",
+      error ? strerror(error) : "hang up");
+
+  pway->exit();
+
+}
+
 //the second half of pway_handle_events(), split out so an embedder that polls
 //pway->fds itself (alongside fds of its own) can skip pway's internal poll()
 //and just tell it the read side is ready. pway_prepare_to_read_events() must
@@ -115,6 +143,15 @@ void pway_dispatch_events(){
 
   wl_display_dispatch_pending(wayland.display);
 
+  //POLLHUP on its own never reaches read_events, so the poll flags have to be
+  //checked as well as the connection error - either one means the display is
+  //gone and none of the handlers below have anything left to work with.
+  if(pway->fds[0].revents & (POLLHUP | POLLERR | POLLNVAL)
+      || wl_display_get_error(wayland.display) != 0){
+    lose_connection();
+    return;
+  }
+
   handle_repeat_keys();
 
 
@@ -126,7 +163,13 @@ void pway_dispatch_events(){
 
 void pway_handle_events(){
 
-  pway_prepare_to_read_events();
+  if(connection_lost)
+    return;
+
+  if(!pway_prepare_to_read_events()){
+    lose_connection();
+    return;
+  }
 
   if (poll(pway->fds, 4, -1) == -1) {
     perror("Poll in fds, APP or Wayland, Keyboard timer");

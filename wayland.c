@@ -147,11 +147,18 @@ RegistryListener registry_listener = {
   .global_remove = remove_global
 };
 
-void pway_prepare_to_read_events(){
-  while(wl_display_prepare_read(wayland.display) != 0)
-    wl_display_dispatch_pending(wayland.display);
+bool pway_prepare_to_read_events(){
+  //once the connection breaks, dispatch_pending stops draining the queue and
+  //just returns -1, so a queue that never empties would spin here forever
+  //without a single syscall. Give up instead and let the caller shut down.
+  while(wl_display_prepare_read(wayland.display) != 0){
+    if(wl_display_dispatch_pending(wayland.display) == -1)
+      return false;
+  }
 
   wl_display_flush(wayland.display);
+
+  return true;
 }
 
 void pway_handle_events_pressed(){
