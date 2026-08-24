@@ -44,6 +44,12 @@ static void pointer_handle_enter(void *data, struct wl_pointer *pointer,
                                  wl_fixed_t sx, wl_fixed_t sy) {
     PWayland* term = data;
 
+    //a click can land before any motion event does, so the position the
+    //pointer entered at is the only thing that says which cell it is on
+    pway->mouse.x = wl_fixed_to_double(sx);
+    pway->mouse.y = wl_fixed_to_double(sy);
+    pway->mouse.last_input_serial = serial;
+
     if(!wayland.cursor_shape_device)
       return;
 

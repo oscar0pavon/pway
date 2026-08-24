@@ -93,29 +93,31 @@ void handle_key_sym(xkb_keysym_t sym){
 
 
   if(ctrl_pressed){
-      // Handle Ctrl
-      if (sym >= XKB_KEY_a && sym <= XKB_KEY_z) {
-          buf[0] = sym - XKB_KEY_a + 1;
+      //with shift held the keysym is already the capital, so fold it back
+      //before turning the letter into its control code
+      xkb_keysym_t letter = sym;
+
+      if (letter >= XKB_KEY_A && letter <= XKB_KEY_Z)
+        letter += XKB_KEY_a - XKB_KEY_A;
+
+      if (letter >= XKB_KEY_a && letter <= XKB_KEY_z) {
+          buf[0] = letter - XKB_KEY_a + 1;
           len = 1;
       } else {
-          len = xkb_keysym_to_utf8(sym, buf, sizeof(buf));
+          //xkb_keysym_to_utf8 counts the terminator it writes, and that byte
+          //is not part of what was typed
+          len = xkb_keysym_to_utf8(sym, buf, sizeof(buf)) - 1;
       }
   } else {
 
-      len = xkb_keysym_to_utf8(sym, buf, sizeof(buf));
+      len = xkb_keysym_to_utf8(sym, buf, sizeof(buf)) - 1;
   }
 
   if (len > 0) {
-    if (!ctrl_pressed){
-      pway->input(buf, len - 1);
-      return;
-    }
-    else{
-      pway->input(buf, len);
-      return;
-    }
+    pway->input(buf, len);
+    return;
   }
-  
+
   pway->update_keys();
 
 }
