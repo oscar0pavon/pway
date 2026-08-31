@@ -65,6 +65,18 @@ void pway_init_egl();
 
 void pway_swap_buffers();
 
+// CPU rendering path: an alternative to pway_init_egl() above, not a
+// complement to it - call one or the other, never both. pway_shm_get_buffer()
+// can return NULL if the compositor still owns every buffer in the pool; the
+// caller must retry on a later loop iteration rather than block.
+void pway_init_shm();
+
+void pway_shm_resize(int width, int height);
+
+uint32_t* pway_shm_get_buffer(int *stride);
+
+void pway_shm_commit(int x, int y, int width, int height);
+
 void pway_primary_copy();
 
 extern PWay* pway;

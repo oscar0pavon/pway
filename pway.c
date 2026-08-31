@@ -5,6 +5,7 @@
 #include <string.h>
 #include <error.h>
 #include "egl.h"
+#include "shm.h"
 #include "wayland.h"
 #include "keyboard.h"
 #include "copy_paste.h"
@@ -18,6 +19,22 @@ struct wl_surface *pway_surface;
 
 void pway_init_egl(){
   init_egl();
+}
+
+void pway_init_shm(){
+  init_shm();
+}
+
+void pway_shm_resize(int width, int height){
+  shm_resize(width, height);
+}
+
+uint32_t* pway_shm_get_buffer(int *stride){
+  return shm_get_buffer(stride);
+}
+
+void pway_shm_commit(int x, int y, int width, int height){
+  shm_commit(x, y, width, height);
 }
 
 bool pway_app_has_event(){

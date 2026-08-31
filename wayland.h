@@ -32,6 +32,7 @@ typedef struct PWayland{
     struct wl_data_offer *active_data_offer;
     struct wp_cursor_shape_manager_v1 *cursor_shape_manager;
     struct wp_cursor_shape_device_v1 *cursor_shape_device;
+    struct wl_shm *shm;
 }PWayland;
 
 

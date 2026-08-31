@@ -107,8 +107,7 @@ void register_global(void *data, Registry *registry, uint32_t name_id,
 
   } else if (is_registry_name(interface_name, wl_shm_interface.name)) {
 
-    wl_registry_bind(registry, name_id, &wl_shm_interface, 1);
-
+    way->shm = wl_registry_bind(registry, name_id, &wl_shm_interface, 1);
 
   } else if (is_registry_name(interface_name, wl_seat_interface.name)) {
 
