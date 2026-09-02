@@ -46,6 +46,9 @@ bool pway_app_has_event();
 
 bool pway_create_window(const char* name, int width, int height);
 
+//set after pway_init(), which is what creates the toplevel this marks
+void pway_set_app_id(const char* app_id);
+
 //false means the connection broke while draining the queue: stop driving the
 //loop, the app's exit callback has not been called yet in that case
 bool pway_prepare_to_read_events();

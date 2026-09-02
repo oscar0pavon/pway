@@ -196,6 +196,14 @@ void pway_handle_events(){
 
 }
 
+//the class of application, not the window: what a compositor keys a rule on.
+//separate from the title because the title changes while the app runs and this
+//does not - sword picks its launcher out by this string
+void pway_set_app_id(const char* app_id){
+
+  xdg_toplevel_set_app_id(wayland.window, app_id);
+}
+
 bool pway_create_window(const char* name, int width, int height){
 
   xdg_toplevel_set_title(wayland.window, name);
