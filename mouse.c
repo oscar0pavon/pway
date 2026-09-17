@@ -92,7 +92,6 @@ void clean_mouse_buttons(){
         pway->mouse.current_button->released = false;
         pway->mouse.current_button = NULL;
         pway_update_mouse_release_event = false;
-        printf("Clean mouse buttons\n");
       }
     }
   }
